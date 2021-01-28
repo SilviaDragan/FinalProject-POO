@@ -1,10 +1,13 @@
 package auction;
 
 import client.Client;
+import employee.Broker;
 import employee.Employee;
 import product.Product;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -12,10 +15,10 @@ import java.util.concurrent.locks.ReentrantLock;
 //singleton
 public class AuctionHouse {
     private static AuctionHouse instance = null;
-    private List<Product> productList;
-    private List<Client> clientList;
-    private List<Auction> auctionList;
-    private List<Employee> employees;
+    private List<Product> productList = new ArrayList<>();
+    private List<Client> clientList = new ArrayList<>();
+    private List<Auction> auctionList = new ArrayList<>();
+    private List<Employee> employees = new ArrayList<>();
     private int capacity; // capacity for productlist
 
     private AuctionHouse() {}
@@ -70,26 +73,46 @@ public class AuctionHouse {
         }
     }
 
-    public void ProcessRequest(Product requestedProduct, Client client) {
-        // house gives client a broker
-        // add client to the list of clients that requested this product (List in Auction)
-        // check if the number of participants in auction is reached
-        // if yes, start auction
+    public Broker assignBroker() {
+        Random random = new Random();
+        Broker broker;
+        while(true) {
+            Employee employee = employees.get(random.nextInt(employees.size()));
+            if ( employee.getEmployeeId() / 100 == 2 ) {
+                broker = (Broker) employee;
+                break;
+            }
+        }
+        return broker;
     }
 
+    public void processRequest(Product requestedProduct, Client client) {
+        // house gives client a broker
+        client.setPersonalBroker(assignBroker());
+        // add client to the list of clients that requested this product (each product has this list)
+        // if no clients have yet requested this product, instace the auction for this product
+        if (requestedProduct.getClientsCompeting().isEmpty()) {
+            int auctionID;
+            if(auctionList.isEmpty()) {
+                auctionID = 5000;
+            }
+            else {
+                auctionID = auctionList.get(auctionList.size()).getId();
+            }
+            Auction auction = new Auction(auctionID, requestedProduct.getId());
+            requestedProduct.setAuction(auction);
+        }
+        requestedProduct.getClientsCompeting().add(client);
+        // check if the number of participants in auction is reached
+        // if yes, start auction
+        if (requestedProduct.getClientsCompeting().size() == requestedProduct.getAuction().getParticipantsNo()) {
+            startAuction(requestedProduct.getAuction());
+        }
 
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    private void startAuction(Auction auction) {
+    }
 
 
     public List<Employee> getEmployees() { return employees; }

@@ -1,5 +1,8 @@
 package product;
 
+import auction.Auction;
+import client.Client;
+
 import java.util.List;
 
 public class Product {
@@ -8,6 +11,12 @@ public class Product {
     private double sellPrice; // the price which the product sold for after the auction
     private double minimumPrice; // the minimum price
     private int year;
+
+
+
+    private Auction auction;
+
+    private List<Client> clientsCompeting;
 
     public Product(int id, String name, double minimumPrice, int year) {
         this.id = id;
@@ -51,4 +60,26 @@ public class Product {
         this.minimumPrice = minimumPrice;
     }
 
+    public List<Client> getClientsCompeting() {
+        return clientsCompeting;
+    }
+
+    public void setClientsCompeting(List<Client> clientsCompeting) {
+        this.clientsCompeting = clientsCompeting;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+    public Auction getAuction() {
+        return auction;
+    }
+
+    public void setAuction(Auction auction) {
+        this.auction = auction;
+    }
 }

@@ -42,8 +42,6 @@ public class ProductRequest implements Command{
         //find the client and the product in their lists
         Client client = findClient(auctionHouse, clientId);
         Product product = findProduct(auctionHouse, productId);
-
-
-
+        auctionHouse.processRequest(product, client);
     }
 }

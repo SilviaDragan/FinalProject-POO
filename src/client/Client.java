@@ -1,11 +1,15 @@
 package client;
 
+import employee.Broker;
+
 public class Client {
     private int id;
     private String name;
     private String address;
     private int participationNo;
     private int wonAuctionsNo;
+    private Broker personalBroker;
+
 
     public Client(int id, String name, String address, int participationNo, int wonAuctionsNo) {
         this.id = id;
@@ -13,6 +17,14 @@ public class Client {
         this.address = address;
         this.participationNo = participationNo;
         this.wonAuctionsNo = wonAuctionsNo;
+    }
+
+    public Broker getPersonalBroker() {
+        return personalBroker;
+    }
+
+    public void setPersonalBroker(Broker personalBroker) {
+        this.personalBroker = personalBroker;
     }
 
     public int getId() {

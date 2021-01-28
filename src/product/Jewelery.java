@@ -4,9 +4,10 @@ public class Jewelery extends Product{
     private String metal;
     private boolean preciousStone;
 
-    public Jewelery(int id, String name, double sellPrince, double minimumPrice) {
-        super(id, name, sellPrince, minimumPrice);
+    public Jewelery(int id, String name, double minimumPrice, int year) {
+        super(id, name, minimumPrice, year);
     }
+
     public String getMetal() {
         return metal;
     }
