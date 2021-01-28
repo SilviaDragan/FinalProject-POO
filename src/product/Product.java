@@ -5,13 +5,14 @@ import java.util.List;
 public class Product {
     private int id; // number that identifies the product
     private String name; // the name of the product
-    private double sellPrice; // the price which the product sold for
+    private double sellPrice; // the price which the product sold for after the auction
     private double minimumPrice; // the minimum price
+    private int year;
 
-    public Product(int id, String name, double sellPrice, double minimumPrice) {
+    public Product(int id, String name, double minimumPrice, int year) {
         this.id = id;
         this.name = name;
-        this.sellPrice = sellPrice;
+//        this.sellPrice = sellPrice;
         this.minimumPrice = minimumPrice;
     }
 

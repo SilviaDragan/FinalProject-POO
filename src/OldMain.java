@@ -32,7 +32,7 @@ public class OldMain {
 //        executor.shutdown();
 
         try {
-            File f = new File("test.in");
+            File f = new File("commands.in");
             Scanner scanner = new Scanner(f);
             AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
             while(scanner.hasNextLine()) {

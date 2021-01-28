@@ -1,3 +1,5 @@
+package command;
+
 import client.Client;
 import client.LegalPerson;
 import client.NaturalPerson;
@@ -86,21 +88,21 @@ public class Reader {
                 Product product;
                 String productType = csvRecord.get(0);
                 int id = Integer.parseInt(csvRecord.get(1));
-                double sell = Double.parseDouble(csvRecord.get(3));
-                double minimum = Double.parseDouble(csvRecord.get(4));
+                double minimum = Double.parseDouble(csvRecord.get(3));
+                int year = Integer.parseInt(csvRecord.get(4));
                 if(productType.equals("Painting")) {
-                    product = new Painting(id, csvRecord.get(2), sell, minimum);
+                    product = new Painting(id, csvRecord.get(2), minimum, year);
                     ((Painting) product).setPainterName(csvRecord.get(5));
                     ((Painting) product).setColorType(csvRecord.get(6));
                 }
                 else if(productType.equals("Jewelery")){
-                    product = new Jewelery(id, csvRecord.get(2), sell, minimum);
+                    product = new Jewelery(id, csvRecord.get(2), minimum, year);
                     ((Jewelery) product).setMetal(csvRecord.get(5));
                     ((Jewelery) product).setIfPrecious(csvRecord.get(6));
 
                 }
                 else {
-                    product = new Furniture(id, csvRecord.get(2), sell, minimum);
+                    product = new Furniture(id, csvRecord.get(2), minimum, year);
                     ((Furniture) product).setType(csvRecord.get(5));
                     ((Furniture) product).setMaterial(csvRecord.get(5));
                 }

@@ -15,5 +15,13 @@ public class NaturalPerson extends Client{
         this.birthDate = birthDate;
     }
 
-
+    public String toString() {
+        String mystr = "";
+        int id = this.getId();
+        int tries = this.getParticipationNo();
+        int wins = this.getWonAuctionsNo();
+        mystr += "NaturalPerson Id:" + id + " Name:" + this.getName() + " Address:" + this.getAddress()
+                + " NumberOfParticiptions:" + tries + " WonAuctions:" + wins + " Birthdate:" + getBirthDate();
+        return mystr;
+    }
 }

@@ -30,4 +30,16 @@ public class LegalPerson extends Client{
         this.socialCapital = socialCapital;
     }
 
+
+    public String toString() {
+        String mystr = "";
+        int id = this.getId();
+        int tries = this.getParticipationNo();
+        int wins = this.getWonAuctionsNo();
+        mystr += "LegalPerson Id:" + id + " Name:" + this.getName() + " Address:" + this.getAddress() +
+                " NumberOfParticiptions:" + tries + " WonAuctions:" + wins + " CompanyType:" + getCompany()
+                + " SocialCapital:" + getSocialCapital();
+        return mystr;
+    }
+
 }

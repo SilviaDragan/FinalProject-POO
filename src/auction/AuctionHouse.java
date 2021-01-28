@@ -15,9 +15,7 @@ public class AuctionHouse {
     private List<Product> productList;
     private List<Client> clientList;
     private List<Auction> auctionList;
-
     private List<Employee> employees;
-
     private int capacity; // capacity for productlist
 
     private AuctionHouse() {}
@@ -70,17 +68,33 @@ public class AuctionHouse {
         }finally {
             lock.unlock();
         }
-
-
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
+    public void ProcessRequest(Product requestedProduct, Client client) {
+        // house gives client a broker
+        // add client to the list of clients that requested this product (List in Auction)
+        // check if the number of participants in auction is reached
+        // if yes, start auction
     }
 
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public List<Employee> getEmployees() { return employees; }
+
+    public void setEmployees(List<Employee> employees) { this.employees = employees; }
 
     public List<Product> getProductList() {
         return productList;
