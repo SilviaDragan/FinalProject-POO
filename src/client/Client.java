@@ -19,6 +19,12 @@ public class Client {
         this.wonAuctionsNo = wonAuctionsNo;
     }
 
+    public void informBrokerBet(double sum) {
+        // client calculates the sum he is willing to bet for the product at every
+        // step of the auction, and informs the broker about it.
+    }
+
+
     public Broker getPersonalBroker() {
         return personalBroker;
     }
@@ -66,5 +72,6 @@ public class Client {
     public void setWonAuctionsNo(int wonAuctionsNo) {
         this.wonAuctionsNo = wonAuctionsNo;
     }
+
 
 }

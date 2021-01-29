@@ -109,13 +109,13 @@ public class AuctionHouse {
         // check if the number of participants in auction is reached
         // if yes, start auction
         if (requestedProduct.getClientsCompeting().size() == requestedProduct.getAuction().getParticipantsNo()) {
-            startAuction(requestedProduct.getAuction());
+            startAuction(requestedProduct.getAuction(), requestedProduct);
         }
 
     }
 
-    private void startAuction(Auction auction) {
-
+    private void startAuction(Auction auction, Product product) {
+        auction.start(product);
     }
 
 
