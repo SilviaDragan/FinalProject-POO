@@ -1,16 +1,17 @@
 package command;
 
 import auction.AuctionHouse;
-import product.Product;
-
+import employee.Administrator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Main {
     public static void main(String[] args) {
-        // create an instace of the House
+        // create an instance of the House
         AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
         // class reader will help read information about employees, clients and products
         Reader reader = new Reader();
@@ -20,15 +21,9 @@ public class Main {
         auctionHouse.setEmployees(reader.readEmployeesCSV(employeesFile));
         auctionHouse.setClientList(reader.readClientsCSV(clientsFile));
         auctionHouse.setProductList(reader.readProductsCSV(productsFile));
-//        for(Employee e: auctionHouse.getEmployees()) {
-//            System.out.println(e);
-//        }
-//        for(Client c: auctionHouse.getClientList()) {
-//            System.out.println(c.toString());
-//        }
-//        for(Product p : auctionHouse.getProductList()) {
-//            System.out.println(p);
-//        }
+
+        ExecutorService threadPool = Executors.newCachedThreadPool();
+
         // read the commands clients, brokers and administrators write in this file
         try {
             File inputFile = new File("commands.in");
@@ -43,8 +38,14 @@ public class Main {
                     ProductRequest productRequest = new ProductRequest(clientId, productId, maxPrice);
                     commandTaker.takeCommand(productRequest);
                 }
+                if(command[0].equals("addProduct")) {
+                    Administrator administrator = auctionHouse.getAdministrator(Integer.parseInt(command[1]));
+                    AddProduct addProduct = new AddProduct(administrator, command, threadPool);
+                    commandTaker.takeCommand(addProduct);
+                }
             }
             commandTaker.doCommands();
+            threadPool.shutdown();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

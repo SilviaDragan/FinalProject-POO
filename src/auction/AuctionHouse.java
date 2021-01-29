@@ -1,6 +1,7 @@
 package auction;
 
 import client.Client;
+import employee.Administrator;
 import employee.Broker;
 import employee.Employee;
 import product.Product;
@@ -42,8 +43,10 @@ public class AuctionHouse {
             while(productList.size() == capacity) {
                 notFull.await();
             }
+//            System.out.println(productList);
             System.out.println("add " + productNew.getName());
             productList.add(productNew);
+//            System.out.println(productList);
             notVid.signal();
         } catch (InterruptedException e) {
             // Restore interrupted state
@@ -112,6 +115,7 @@ public class AuctionHouse {
     }
 
     private void startAuction(Auction auction) {
+
     }
 
 
@@ -149,5 +153,14 @@ public class AuctionHouse {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public Administrator getAdministrator(int adminId) {
+        for(Employee e : employees) {
+            if(e.getEmployeeId() == adminId) {
+                return (Administrator) e;
+            }
+        }
+        return null;
     }
 }

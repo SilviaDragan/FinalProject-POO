@@ -3,6 +3,7 @@ package product;
 import auction.Auction;
 import client.Client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Product {
@@ -11,12 +12,8 @@ public class Product {
     private double sellPrice; // the price which the product sold for after the auction
     private double minimumPrice; // the minimum price
     private int year;
-
-
-
     private Auction auction;
-
-    private List<Client> clientsCompeting;
+    private List<Client> clientsCompeting = new ArrayList<>();
 
     public Product(int id, String name, double minimumPrice, int year) {
         this.id = id;
