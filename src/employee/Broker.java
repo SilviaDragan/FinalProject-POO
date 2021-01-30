@@ -1,5 +1,6 @@
 package employee;
 
+import auction.Auction;
 import auction.AuctionHouse;
 import client.Client;
 import product.Product;
@@ -16,14 +17,28 @@ public class Broker extends Employee implements Runnable{
     }
 
 
-//    public Broker(Product product) {
-//        this.soldProduct = product;
-//    }
-
     @Override
     public void run() {
         auctionHouse.removeProduct(soldProduct);
     }
+
+    public void clientPlacedBet(int auctionId, double sum) {
+        Auction auction = findAuction(auctionId);
+        if (auction != null) {
+            auction.getBetsList().add(sum);
+        }
+
+    }
+
+    private Auction findAuction(int auctionId) {
+        for(Auction a : auctionHouse.getAuctionList()) {
+            if (a.getId() == auctionId) {
+                return a;
+            }
+        }
+        return null;
+    }
+
 
     public Product getSoldProduct() {
         return soldProduct;
@@ -40,4 +55,6 @@ public class Broker extends Employee implements Runnable{
     public void setClients(List<Client> clients) {
         this.clients = clients;
     }
+
+
 }

@@ -2,7 +2,7 @@ package client;
 
 import employee.Broker;
 
-public class Client {
+public abstract class Client {
     private int id;
     private String name;
     private String address;
@@ -19,10 +19,7 @@ public class Client {
         this.wonAuctionsNo = wonAuctionsNo;
     }
 
-    public void informBrokerBet(double sum) {
-        // client calculates the sum he is willing to bet for the product at every
-        // step of the auction, and informs the broker about it.
-    }
+    public abstract void placeBet(int auctionId, double maxPreviousSum, double maxSumForMe);
 
 
     public Broker getPersonalBroker() {

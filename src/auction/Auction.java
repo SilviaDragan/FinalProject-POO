@@ -2,37 +2,74 @@ package auction;
 
 import client.Client;
 import product.Product;
-
 import java.util.ArrayList;
 import java.util.List;
 
+// comment for yourself:
+// try to implement observer pattern here
+
 public class Auction {
+    private final AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
     private int id;
     private int participantsNo;
     private int productId;
     private int maxStepsNo;
+    private List<Double> betsList = new ArrayList<>();
 
     public Auction(int id, int productId) {
         this.id = id;
         this.productId = productId;
     }
     public void start(Product product) {
-        double SumForCurrentStep = 0;
-        for (int step = 0; step <= maxStepsNo; step++) {
-            // for each step, the sum that each clients bet will be stored in this list
-            // NOOOOOOO so the client will bet and THE BROKER will add the sum to the list !!!!!!!!
-            // client can not communicate with the house directly
-
-
-            // idk how to do this come back tomorrow and
-            // DO THIS!!!! FIGURE IT OUT !!!!!
-            List<Double> sumsList = new ArrayList<>();
-            // clients choose the sum they desire to bet at each step and communicate
-            // this sum to their assigned broker
-            for (Client client : product.getClientsCompeting()) {
-                client.informBrokerBet(SumForCurrentStep);
+        double maxBetPerStep = 0;
+        for (int step = 0; step < maxStepsNo; step++) {
+            // clients choose the sum they desire to bet at each step and communicate this sum to their assigned broker
+            for( int i  = 0; i < participantsNo; i++) {
+                product.getClientsCompeting().get(i)
+                        .placeBet(id, maxBetPerStep, product.getMaxSumPerCLient().get(i) );
+            }
+            // after clients place their bets, the house will calculate the max bet
+            maxBetPerStep = auctionHouse.giveMaxBet(betsList);
+            // clear the bets list at every step, unless it is the last round
+            if ( step == maxStepsNo - 1) {
+                if(maxBetPerStep < product.getMinimumPrice()) return; // product does not sell in this case
+                // get winner
+                Client winner = getWinner(maxBetPerStep, betsList, product);
+                product.setSellPrice(maxBetPerStep);
+            }
+            else {
+                betsList.clear();
             }
         }
+    }
+
+    private Client getWinner(double winnerBet, List<Double> betsList, Product product) {
+        List<Client> winners = new ArrayList<>();
+        Client finalWinner = null;
+        for ( int i = 0; i < betsList.size() - 1; i++) {
+            if (betsList.get(i) == winnerBet) {
+                winners.add(product.getClientsCompeting().get(i));
+            }
+        }
+        if(winners.size() == 1) finalWinner =  winners.get(0);
+        else {
+            int maxWins = 0;
+            for (Client c : product.getClientsCompeting()) {
+                if(c.getWonAuctionsNo() > maxWins) {
+                    finalWinner = c;
+                }
+            }
+
+        }
+        return finalWinner;
+    }
+
+    public List<Double> getBetsList() {
+        return betsList;
+    }
+
+    public void setBetsList(List<Double> betsList) {
+        this.betsList = betsList;
     }
 
     public int getId() {

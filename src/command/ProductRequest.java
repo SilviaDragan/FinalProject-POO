@@ -1,19 +1,18 @@
 package command;
 
-import auction.Auction;
 import auction.AuctionHouse;
 import client.Client;
 import product.Product;
 
 public class ProductRequest implements Command{
-    private int clientId;
-    private int productId;
-    private double maxPrice;
+    private final int clientId;
+    private final int productId;
+    private final double maxSum;
 
-    public ProductRequest(int clientId, int productId, double maxPrice) {
+    public ProductRequest(int clientId, int productId, double maxSum) {
         this.clientId = clientId;
         this.productId = productId;
-        this.maxPrice = maxPrice;
+        this.maxSum = maxSum;
     }
 
     public Client findClient(AuctionHouse auctionHouse, int id) {
@@ -42,6 +41,6 @@ public class ProductRequest implements Command{
         //find the client and the product in their lists
         Client client = findClient(auctionHouse, clientId);
         Product product = findProduct(auctionHouse, productId);
-        auctionHouse.processRequest(product, client);
+        auctionHouse.processRequest(product, client, maxSum);
     }
 }

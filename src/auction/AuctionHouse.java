@@ -7,6 +7,7 @@ import employee.Employee;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.locks.Condition;
@@ -20,7 +21,7 @@ public class AuctionHouse {
     private List<Client> clientList = new ArrayList<>();
     private List<Auction> auctionList = new ArrayList<>();
     private List<Employee> employees = new ArrayList<>();
-    private int capacity; // capacity for productlist
+    private int capacity; // capacity for product list
 
     private AuctionHouse() {}
 
@@ -89,7 +90,7 @@ public class AuctionHouse {
         return broker;
     }
 
-    public void processRequest(Product requestedProduct, Client client) {
+    public void processRequest(Product requestedProduct, Client client, double maxSum) {
         // house gives client a broker
         client.setPersonalBroker(assignBroker());
         // add client to the list of clients that requested this product (each product has this list)
@@ -100,12 +101,13 @@ public class AuctionHouse {
                 auctionID = 5000;
             }
             else {
-                auctionID = auctionList.get(auctionList.size()).getId();
+                auctionID = auctionList.get(auctionList.size() - 1).getId();
             }
             Auction auction = new Auction(auctionID, requestedProduct.getId());
             requestedProduct.setAuction(auction);
         }
         requestedProduct.getClientsCompeting().add(client);
+        requestedProduct.getMaxSumPerCLient().add(maxSum);
         // check if the number of participants in auction is reached
         // if yes, start auction
         if (requestedProduct.getClientsCompeting().size() == requestedProduct.getAuction().getParticipantsNo()) {
@@ -116,6 +118,11 @@ public class AuctionHouse {
 
     private void startAuction(Auction auction, Product product) {
         auction.start(product);
+    }
+
+
+    public double giveMaxBet(List<Double> betsList) {
+        return Collections.max(betsList);
     }
 
 
@@ -163,4 +170,5 @@ public class AuctionHouse {
         }
         return null;
     }
+
 }

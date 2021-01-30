@@ -14,12 +14,13 @@ public class Product {
     private int year;
     private Auction auction;
     private List<Client> clientsCompeting = new ArrayList<>();
+    private List<Double> maxSumPerCLient = new ArrayList<>();
 
     public Product(int id, String name, double minimumPrice, int year) {
         this.id = id;
         this.name = name;
-//        this.sellPrice = sellPrice;
         this.minimumPrice = minimumPrice;
+        this.year = year;
     }
 
 
@@ -78,5 +79,13 @@ public class Product {
 
     public void setAuction(Auction auction) {
         this.auction = auction;
+    }
+
+    public List<Double> getMaxSumPerCLient() {
+        return maxSumPerCLient;
+    }
+
+    public void setMaxSumPerCLient(List<Double> maxSumPerCLient) {
+        this.maxSumPerCLient = maxSumPerCLient;
     }
 }
