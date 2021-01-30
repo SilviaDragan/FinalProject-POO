@@ -6,7 +6,7 @@ import client.Client;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+public abstract class Product {
     private int id; // number that identifies the product
     private String name; // the name of the product
     private double sellPrice; // the price which the product sold for after the auction
@@ -14,7 +14,7 @@ public class Product {
     private int year;
     private Auction auction;
     private List<Client> clientsCompeting = new ArrayList<>();
-    private List<Double> maxSumPerCLient = new ArrayList<>();
+    private List<Double> maxSumPerClient = new ArrayList<>();
 
     public Product(int id, String name, double minimumPrice, int year) {
         this.id = id;
@@ -81,11 +81,11 @@ public class Product {
         this.auction = auction;
     }
 
-    public List<Double> getMaxSumPerCLient() {
-        return maxSumPerCLient;
+    public List<Double> getMaxSumPerClient() {
+        return maxSumPerClient;
     }
 
-    public void setMaxSumPerCLient(List<Double> maxSumPerCLient) {
-        this.maxSumPerCLient = maxSumPerCLient;
+    public void setMaxSumPerClient(List<Double> maxSumPerClient) {
+        this.maxSumPerClient = maxSumPerClient;
     }
 }

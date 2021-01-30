@@ -107,7 +107,7 @@ public class AuctionHouse {
             requestedProduct.setAuction(auction);
         }
         requestedProduct.getClientsCompeting().add(client);
-        requestedProduct.getMaxSumPerCLient().add(maxSum);
+        requestedProduct.getMaxSumPerClient().add(maxSum);
         // check if the number of participants in auction is reached
         // if yes, start auction
         if (requestedProduct.getClientsCompeting().size() == requestedProduct.getAuction().getParticipantsNo()) {

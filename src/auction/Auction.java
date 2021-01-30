@@ -26,7 +26,7 @@ public class Auction {
             // clients choose the sum they desire to bet at each step and communicate this sum to their assigned broker
             for( int i  = 0; i < participantsNo; i++) {
                 product.getClientsCompeting().get(i)
-                        .placeBet(id, maxBetPerStep, product.getMaxSumPerCLient().get(i) );
+                        .placeBet(id, maxBetPerStep, product.getMaxSumPerClient().get(i) );
             }
             // after clients place their bets, the house will calculate the max bet
             maxBetPerStep = auctionHouse.giveMaxBet(betsList);
