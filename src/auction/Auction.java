@@ -30,12 +30,14 @@ public class Auction {
             }
             // after clients place their bets, the house will calculate the max bet
             maxBetPerStep = auctionHouse.giveMaxBet(betsList);
+            System.out.println("step:" +step + " max bet:" + maxBetPerStep);
             // clear the bets list at every step, unless it is the last round
             if ( step == maxStepsNo - 1) {
                 if(maxBetPerStep < product.getMinimumPrice()) return; // product does not sell in this case
                 // get winner
                 Client winner = getWinner(maxBetPerStep, betsList, product);
                 product.setSellPrice(maxBetPerStep);
+                System.out.println("winner is:" + winner.getName());
             }
             else {
                 betsList.clear();

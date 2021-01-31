@@ -27,7 +27,6 @@ public class Broker extends Employee implements Runnable{
         if (auction != null) {
             auction.getBetsList().add(sum);
         }
-
     }
 
     private Auction findAuction(int auctionId) {
