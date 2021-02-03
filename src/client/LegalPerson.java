@@ -63,4 +63,8 @@ public class LegalPerson extends Client{
         return mystr;
     }
 
+    @Override
+    public void update() {
+
+    }
 }

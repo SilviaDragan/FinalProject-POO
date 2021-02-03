@@ -43,6 +43,11 @@ public class Main {
                     AddProduct addProduct = new AddProduct(administrator, command, threadPool);
                     commandTaker.takeCommand(addProduct);
                 }
+                if(command[0].equals("setAuctionData")){
+                    Administrator administrator = auctionHouse.getAdministrator(Integer.parseInt(command[1]));
+                    SetAuctionData setAuctionData = new SetAuctionData(Integer.parseInt(command[2]),
+                            Integer.parseInt(command[3]), Integer.parseInt(command[4]));
+                }
             }
             commandTaker.doCommands();
             threadPool.shutdown();

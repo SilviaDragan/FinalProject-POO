@@ -94,21 +94,6 @@ public class AuctionHouse {
         // house gives client a broker
         client.setPersonalBroker(assignBroker());
         // add client to the list of clients that requested this product (each product has this list)
-        // if no clients have yet requested this product, instance the auction for this product
-        if (requestedProduct.getClientsCompeting().isEmpty()) {
-            int auctionID;
-            if(auctionList.isEmpty()) {
-                auctionID = 5000;
-            }
-            else {
-                auctionID = auctionList.get(auctionList.size() - 1).getId();
-            }
-            Auction auction = new Auction(auctionID, requestedProduct.getId());
-            auction.setMaxStepsNo(5);
-            auction.setParticipantsNo(3);
-            auctionList.add(auction);
-            requestedProduct.setAuction(auction);
-        }
         requestedProduct.getClientsCompeting().add(client);
         requestedProduct.getMaxSumPerClient().add(maxSum);
         // check if the number of participants in auction is reached

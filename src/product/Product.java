@@ -24,11 +24,6 @@ public abstract class Product {
     }
 
 
-    // metodele din subclase le definesti aici abstracte
-    // sublasele trebuie sa implementeze toate metodele din clasa asta
-    // vedem ce facem builder
-    // constructorul ar trebui sa fie protected
-
 
     public int getId() {
         return id;

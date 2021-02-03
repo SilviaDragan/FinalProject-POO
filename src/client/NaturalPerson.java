@@ -46,4 +46,9 @@ public class NaturalPerson extends Client{
                 + " NumberOfParticipation:" + tries + " WonAuctions:" + wins + " Birthdate:" + getBirthDate();
         return mystr;
     }
+
+    @Override
+    public void update() {
+
+    }
 }

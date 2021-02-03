@@ -1,5 +1,7 @@
 package command;
 
+import auction.Auction;
+import auction.AuctionHouse;
 import client.Client;
 import client.LegalPerson;
 import client.NaturalPerson;
@@ -106,7 +108,18 @@ public class Reader {
                     ((Furniture) product).setType(csvRecord.get(5));
                     ((Furniture) product).setMaterial(csvRecord.get(5));
                 }
+                AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
+                int auctionID;
+                if(auctionHouse.getAuctionList().isEmpty()) {
+                    auctionID = 5000;
+                }
+                else {
+                    auctionID = auctionHouse.getAuctionList().get(auctionHouse.getAuctionList().size() - 1).getId();
+                }
+                Auction auction = new Auction(auctionID, product.getId());
+                product.setAuction(auction);
                 products.add(product);
+
             }
 
         } catch (IOException e) {

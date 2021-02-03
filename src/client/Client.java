@@ -1,8 +1,9 @@
 package client;
 
+import auction.Observer;
 import employee.Broker;
 
-public abstract class Client {
+public abstract class Client implements Observer {
     private int id;
     private String name;
     private String address;

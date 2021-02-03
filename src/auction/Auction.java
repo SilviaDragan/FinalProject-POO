@@ -8,18 +8,48 @@ import java.util.List;
 // comment for yourself:
 // try to implement observer pattern here
 
-public class Auction {
+public class Auction implements Subject{
     private final AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
     private int id;
     private int participantsNo;
     private int productId;
     private int maxStepsNo;
     private List<Double> betsList = new ArrayList<>();
+    private List<Observer> observers = new ArrayList<>();
+    private int state;
 
     public Auction(int id, int productId) {
         this.id = id;
         this.productId = productId;
     }
+
+    @Override
+    public void registerObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update();
+        }
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+        notifyObservers();
+    }
+
+
     public void start(Product product) {
         double maxBetPerStep = 0;
         for (int step = 0; step < maxStepsNo; step++) {
@@ -82,9 +112,9 @@ public class Auction {
         this.id = id;
     }
 
-    public int getParticipantsNo() {
-        return participantsNo;
-    }
+    public int getParticipantsNo() { return participantsNo; }
+
+    public List<Observer> getObservers() { return observers; }
 
     public void setParticipantsNo(int participantsNo) {
         this.participantsNo = participantsNo;
@@ -105,6 +135,7 @@ public class Auction {
     public void setMaxStepsNo(int maxStepsNo) {
         this.maxStepsNo = maxStepsNo;
     }
+
 
 
 }

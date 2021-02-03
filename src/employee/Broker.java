@@ -2,12 +2,13 @@ package employee;
 
 import auction.Auction;
 import auction.AuctionHouse;
+import auction.Observer;
 import client.Client;
 import product.Product;
 
 import java.util.List;
 
-public class Broker extends Employee implements Runnable{
+public class Broker extends Employee implements Runnable, Observer {
     private final AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
     private List<Client> clients;
     private Product soldProduct;
@@ -56,4 +57,8 @@ public class Broker extends Employee implements Runnable{
     }
 
 
+    @Override
+    public void update() {
+
+    }
 }
