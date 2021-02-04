@@ -5,28 +5,40 @@ import auction.AuctionHouse;
 import auction.Observer;
 import client.Client;
 import product.Product;
-
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Broker extends Employee implements Runnable, Observer {
     private final AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
-    private List<Client> clients;
+
+    private Map<Auction, Map<Client, Double>> clientsMap = new HashMap<>();
     private Product soldProduct;
 
     public Broker(int employeeId) {
         super(employeeId);
     }
 
+    @Override
+    public void update(int state) {
+        // all brokers are observers
+        // idk
+    }
 
     @Override
     public void run() {
         auctionHouse.removeProduct(soldProduct);
     }
 
-    public void clientPlacedBet(int auctionId, double sum) {
+    public void askNextBet(Auction auction, double maxBetPerStep) {
+        for (Client c : clientsMap.get(auction).keySet()) {
+            c.placeBet(auction.getId(), maxBetPerStep, clientsMap.get(auction).get(c));
+        }
+    }
+
+    public void clientPlacedBet(Client client, int auctionId, double sum) {
         Auction auction = findAuction(auctionId);
         if (auction != null) {
-            auction.getBetsList().add(sum);
+            auction.getBetsMap().put(sum, client);
         }
     }
 
@@ -40,6 +52,15 @@ public class Broker extends Employee implements Runnable, Observer {
     }
 
 
+
+    public Map<Auction, Map<Client, Double>> getClientsMap() {
+        return clientsMap;
+    }
+
+    public void setClientsMap(Map<Auction, Map<Client, Double>> clientsMap) {
+        this.clientsMap = clientsMap;
+    }
+
     public Product getSoldProduct() {
         return soldProduct;
     }
@@ -48,17 +69,5 @@ public class Broker extends Employee implements Runnable, Observer {
         this.soldProduct = soldProduct;
     }
 
-    public List<Client> getClients() {
-        return clients;
-    }
 
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
-    }
-
-
-    @Override
-    public void update() {
-
-    }
 }

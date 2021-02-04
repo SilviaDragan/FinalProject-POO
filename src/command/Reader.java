@@ -50,6 +50,26 @@ public class Reader {
         return employees;
     }
 
+    public List<Broker> giveBrokerList(List<Employee> employees) {
+        List<Broker> brokers = new ArrayList<>();
+        for (Employee e : employees) {
+            if (e instanceof Broker) {
+                brokers.add((Broker) e);
+            }
+        }
+        return brokers;
+    }
+
+    public List<Administrator> giveAdminsList(List<Employee> employees) {
+        List<Administrator> administrators = new ArrayList<>();
+        for (Employee e : employees) {
+            if (e instanceof Administrator) {
+                administrators.add((Administrator) e);
+            }
+        }
+        return administrators;
+    }
+
     List<Client> readClientsCSV(String filename) {
         List<Client> clients = new ArrayList<>();
         try (
@@ -117,6 +137,7 @@ public class Reader {
                     auctionID = auctionHouse.getAuctionList().get(auctionHouse.getAuctionList().size() - 1).getId();
                 }
                 Auction auction = new Auction(auctionID, product.getId());
+                auctionHouse.getAuctionList().add(auction);
                 product.setAuction(auction);
                 products.add(product);
 

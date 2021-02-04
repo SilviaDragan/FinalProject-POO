@@ -17,7 +17,7 @@ public class LegalPerson extends Client{
         // but if the sum is bigger than the max sum he is willing to bet...
         if(maxPreviousSum > maxSumForMe) {
             System.out.println(this.getName() + " nextBet:" + maxSumForMe);
-            getPersonalBroker().clientPlacedBet(auctionId, maxSumForMe);
+            getPersonalBroker().clientPlacedBet(this, auctionId, maxSumForMe);
         }
         else {
             // the sum a natural person will bet is calculated by subtracting from the maximum sum
@@ -26,9 +26,10 @@ public class LegalPerson extends Client{
             // add it to max bet at previous step
             double nextBet = maxPreviousSum + (maxSumForMe - maxPreviousSum) / 3;
 //            System.out.println(this.getName() + " nextBet:" + nextBet);
-            getPersonalBroker().clientPlacedBet(auctionId, nextBet);
+            getPersonalBroker().clientPlacedBet(this, auctionId, nextBet);
         }
     }
+
 
     public CompanyType getCompany() {
         return company;
@@ -63,8 +64,4 @@ public class LegalPerson extends Client{
         return mystr;
     }
 
-    @Override
-    public void update() {
-
-    }
 }

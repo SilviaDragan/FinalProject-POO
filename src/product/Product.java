@@ -13,8 +13,8 @@ public abstract class Product {
     private double minimumPrice; // the minimum price
     private int year;
     private Auction auction;
-    private List<Client> clientsCompeting = new ArrayList<>();
-    private List<Double> maxSumPerClient = new ArrayList<>();
+//    private List<Client> clientsCompeting = new ArrayList<>();
+//    private List<Double> maxSumPerClient = new ArrayList<>();
 
     public Product(int id, String name, double minimumPrice, int year) {
         this.id = id;
@@ -22,8 +22,6 @@ public abstract class Product {
         this.minimumPrice = minimumPrice;
         this.year = year;
     }
-
-
 
     public int getId() {
         return id;
@@ -53,14 +51,6 @@ public abstract class Product {
         this.minimumPrice = minimumPrice;
     }
 
-    public List<Client> getClientsCompeting() {
-        return clientsCompeting;
-    }
-
-    public void setClientsCompeting(List<Client> clientsCompeting) {
-        this.clientsCompeting = clientsCompeting;
-    }
-
     public int getYear() {
         return year;
     }
@@ -68,6 +58,7 @@ public abstract class Product {
     public void setYear(int year) {
         this.year = year;
     }
+
     public Auction getAuction() {
         return auction;
     }
@@ -76,11 +67,4 @@ public abstract class Product {
         this.auction = auction;
     }
 
-    public List<Double> getMaxSumPerClient() {
-        return maxSumPerClient;
-    }
-
-    public void setMaxSumPerClient(List<Double> maxSumPerClient) {
-        this.maxSumPerClient = maxSumPerClient;
-    }
 }

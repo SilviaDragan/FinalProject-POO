@@ -3,7 +3,7 @@ package client;
 import auction.Observer;
 import employee.Broker;
 
-public abstract class Client implements Observer {
+public abstract class Client{
     private int id;
     private String name;
     private String address;
@@ -11,8 +11,7 @@ public abstract class Client implements Observer {
     private int wonAuctionsNo;
     private Broker personalBroker;
 
-
-    public Client(int id, String name, String address, int participationNo, int wonAuctionsNo) {
+    protected Client(int id, String name, String address, int participationNo, int wonAuctionsNo) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -22,13 +21,19 @@ public abstract class Client implements Observer {
 
     public abstract void placeBet(int auctionId, double maxPreviousSum, double maxSumForMe);
 
-
     public Broker getPersonalBroker() {
         return personalBroker;
     }
 
     public void setPersonalBroker(Broker personalBroker) {
         this.personalBroker = personalBroker;
+    }
+    public void wonAuction() {
+        this.wonAuctionsNo ++;
+    }
+
+    public void newParticipation() {
+        this.participationNo ++;
     }
 
     public int getId() {

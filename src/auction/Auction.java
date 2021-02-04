@@ -1,12 +1,10 @@
 package auction;
 
 import client.Client;
+import employee.Broker;
 import product.Product;
-import java.util.ArrayList;
-import java.util.List;
 
-// comment for yourself:
-// try to implement observer pattern here
+import java.util.*;
 
 public class Auction implements Subject{
     private final AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
@@ -14,9 +12,11 @@ public class Auction implements Subject{
     private int participantsNo;
     private int productId;
     private int maxStepsNo;
-    private List<Double> betsList = new ArrayList<>();
     private List<Observer> observers = new ArrayList<>();
-    private int state;
+    private double maxBetPerStep = 0;
+    private Map<Double, Client> betsMap = new TreeMap<>(Collections.reverseOrder());
+    private int state ; // 0 = started auction, 1 = done, 2 = product not sold
+    private Client winner;
 
     public Auction(int id, int productId) {
         this.id = id;
@@ -29,79 +29,68 @@ public class Auction implements Subject{
     }
 
     @Override
-    public void removeObserver(Observer o) {
-
-    }
+    public void removeObserver(Observer o) { }
 
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update();
+            observer.update(state);
         }
-    }
-
-    public int getState() {
-        return state;
     }
 
     public void setState(int state) {
         this.state = state;
-        notifyObservers();
     }
-
 
     public void start(Product product) {
-        double maxBetPerStep = 0;
+        this.state = 0;
+        notifyObservers();
         for (int step = 0; step < maxStepsNo; step++) {
             // clients choose the sum they desire to bet at each step and communicate this sum to their assigned broker
-            for( int i  = 0; i < participantsNo; i++) {
-                product.getClientsCompeting().get(i)
-                        .placeBet(id, maxBetPerStep, product.getMaxSumPerClient().get(i) );
+            for (Broker broker : auctionHouse.getBrokers()) {
+                if (broker.getClientsMap().containsKey(this)) {
+                    broker.askNextBet(this, maxBetPerStep);
+                }
             }
             // after clients place their bets, the house will calculate the max bet
-            maxBetPerStep = auctionHouse.giveMaxBet(betsList);
+            maxBetPerStep = auctionHouse.giveMaxBet(betsMap);
             System.out.println("step:" +step + " max bet:" + maxBetPerStep);
+
             // clear the bets list at every step, unless it is the last round
-            if ( step == maxStepsNo - 1) {
-                if(maxBetPerStep < product.getMinimumPrice()) return; // product does not sell in this case
-                // get winner
-                Client winner = getWinner(maxBetPerStep, betsList, product);
-                product.setSellPrice(maxBetPerStep);
-                System.out.println("winner is:" + winner.getName());
-            }
-            else {
-                betsList.clear();
-            }
+            if(step != maxStepsNo - 1) betsMap.clear();
         }
+        // if product does not sell, notify clients through brokers that the auction is done
+        if (maxBetPerStep < product.getMinimumPrice()) {
+            // product does not sell in this case
+            this.state = 2;
+            notifyObservers();
+        }
+        // get winner, notify all clients through brokers
+        auctionHouse.winner(this, getWinner(maxBetPerStep, (TreeMap<Double, Client>) betsMap), maxBetPerStep);
+        Client winner = getWinner(maxBetPerStep, (TreeMap<Double, Client>) betsMap);
+        notifyObservers();
+//        product.setSellPrice(maxBetPerStep);
+        System.out.println("winner is:" + winner.getName());
     }
 
-    private Client getWinner(double winnerBet, List<Double> betsList, Product product) {
+    private Client getWinner(double winnerBet, TreeMap<Double, Client> betsList) {
         List<Client> winners = new ArrayList<>();
         Client finalWinner = null;
-        for ( int i = 0; i < betsList.size() - 1; i++) {
-            if (betsList.get(i) == winnerBet) {
-                winners.add(product.getClientsCompeting().get(i));
-            }
+        NavigableMap<Double, Client> winnersMap= betsList.headMap(winnerBet, true);
+        for(Client c : winnersMap.values()) {
+//            System.out.println("winner " + c.getName());
+            winners.add(c);
         }
         if(winners.size() == 1) finalWinner =  winners.get(0);
         else {
             int maxWins = 0;
-            for (Client c : product.getClientsCompeting()) {
-                if(c.getWonAuctionsNo() > maxWins) {
+            for (Client c : winners) {
+                if(c.getWonAuctionsNo() >= maxWins) {
                     finalWinner = c;
                 }
             }
-
         }
         return finalWinner;
-    }
-
-    public List<Double> getBetsList() {
-        return betsList;
-    }
-
-    public void setBetsList(List<Double> betsList) {
-        this.betsList = betsList;
     }
 
     public int getId() {
@@ -120,6 +109,16 @@ public class Auction implements Subject{
         this.participantsNo = participantsNo;
     }
 
+
+    public Map<Double, Client> getBetsMap() {
+        return betsMap;
+    }
+
+    public void setBetsMap(Map<Double, Client> betsMap) {
+        this.betsMap = betsMap;
+    }
+
+
     public int getProductId() {
         return productId;
     }
@@ -136,6 +135,9 @@ public class Auction implements Subject{
         this.maxStepsNo = maxStepsNo;
     }
 
+    public void setWinner(Client winner) {
+        this.winner = winner;
+    }
 
 
 }
