@@ -3,28 +3,39 @@ package product;
 /**
  * This class is a builder for class Products
  */
-public class ProductBuilder {
-//    private final Product product = new Product();
+public abstract class ProductBuilder<T extends Product, B extends ProductBuilder> {
+    protected T specificProduct;
+    protected B specificBuilder;
 
-//    public Product build() { return product; }
+    protected abstract T getSpecificProduct();
+    protected abstract B getSpecificBuilder();
 
-//    public ProductBuilder withId(int id) {
-//        product.setId(id);
-//        return this;
-//    }
-//
-//    public ProductBuilder withName(String name) {
-//        product.setName(name);
-//        return this;
-//    }
-//
-//    public ProductBuilder withSellPrice(double sellPrice) {
-//        product.setSellPrice(sellPrice);
-//        return this;
-//    }
-//
-//    public ProductBuilder withMinimumPrice(double minimumPrice) {
-//        product.setMinimumPrice(minimumPrice);
-//        return this;
-//    }
+    protected ProductBuilder () {
+        specificProduct = getSpecificProduct();
+        specificBuilder = getSpecificBuilder();
+    }
+
+    public B withId(int id) {
+        specificProduct.setId(id);
+        return specificBuilder;
+    }
+
+    public B withName(String name) {
+        specificProduct.setName(name);
+        return specificBuilder;
+    }
+
+    public B withMinimumPrice(double minimumPrice) {
+        specificProduct.setMinimumPrice(minimumPrice);
+        return specificBuilder;
+    }
+
+    public B withYear(int year) {
+        specificProduct.setYear(year);
+        return specificBuilder;
+    }
+
+    public T build() {
+        return specificProduct;
+    }
 }

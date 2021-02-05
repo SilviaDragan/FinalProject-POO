@@ -4,10 +4,13 @@ public class Furniture extends Product{
     private String type;
     private String material;
 
-    public Furniture(int id, String name, double minimumPrice, int year) {
+    protected Furniture(int id, String name, double minimumPrice, int year) {
         super(id, name, minimumPrice, year);
     }
 
+    protected Furniture() {
+        super();
+    }
 
     public String getType() {
         return type;

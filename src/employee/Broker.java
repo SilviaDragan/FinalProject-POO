@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class Broker extends Employee implements Runnable, Observer {
     private final AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
-
     private Map<Auction, Map<Client, Double>> clientsMap = new HashMap<>();
     private Product soldProduct;
 
@@ -50,8 +49,6 @@ public class Broker extends Employee implements Runnable, Observer {
         }
         return null;
     }
-
-
 
     public Map<Auction, Map<Client, Double>> getClientsMap() {
         return clientsMap;

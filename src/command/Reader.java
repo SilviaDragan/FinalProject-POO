@@ -8,7 +8,6 @@ import client.NaturalPerson;
 import employee.Administrator;
 import employee.Broker;
 import employee.Employee;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,10 +17,7 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import product.Furniture;
-import product.Jewelery;
-import product.Painting;
-import product.Product;
+import product.*;
 
 public class Reader {
 
@@ -109,24 +105,35 @@ public class Reader {
             for (CSVRecord csvRecord : csvParser) {
                 Product product;
                 String productType = csvRecord.get(0);
-                int id = Integer.parseInt(csvRecord.get(1));
-                double minimum = Double.parseDouble(csvRecord.get(3));
-                int year = Integer.parseInt(csvRecord.get(4));
                 if(productType.equals("Painting")) {
-                    product = new Painting(id, csvRecord.get(2), minimum, year);
-                    ((Painting) product).setPainterName(csvRecord.get(5));
-                    ((Painting) product).setColorType(csvRecord.get(6));
+                    PaintingBuilder builder = new PaintingBuilder()
+                            .withId(Integer.parseInt(csvRecord.get(1)))
+                            .withName(csvRecord.get(2))
+                            .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
+                            .withYear(Integer.parseInt(csvRecord.get(4)))
+                            .withPainter(csvRecord.get(5))
+                            .withColor(csvRecord.get(6));
+                    product = builder.build();
                 }
                 else if(productType.equals("Jewelery")){
-                    product = new Jewelery(id, csvRecord.get(2), minimum, year);
-                    ((Jewelery) product).setMetal(csvRecord.get(5));
-                    ((Jewelery) product).setIfPrecious(csvRecord.get(6));
-
+                    JeweleryBuilder builder = new JeweleryBuilder()
+                            .withId(Integer.parseInt(csvRecord.get(1)))
+                            .withName(csvRecord.get(2))
+                            .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
+                            .withYear(Integer.parseInt(csvRecord.get(4)))
+                            .withMetal(csvRecord.get(5))
+                            .withPrecious(csvRecord.get(6));
+                    product = builder.build();
                 }
                 else {
-                    product = new Furniture(id, csvRecord.get(2), minimum, year);
-                    ((Furniture) product).setType(csvRecord.get(5));
-                    ((Furniture) product).setMaterial(csvRecord.get(5));
+                    FurnitureBuilder builder = new FurnitureBuilder()
+                            .withId(Integer.parseInt(csvRecord.get(1)))
+                            .withName(csvRecord.get(2))
+                            .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
+                            .withYear(Integer.parseInt(csvRecord.get(4)))
+                            .withType(csvRecord.get(5))
+                            .withMaterial(csvRecord.get(6));
+                    product = builder.build();
                 }
                 AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
                 int auctionID;
@@ -140,7 +147,6 @@ public class Reader {
                 auctionHouse.getAuctionList().add(auction);
                 product.setAuction(auction);
                 products.add(product);
-
             }
 
         } catch (IOException e) {

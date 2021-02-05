@@ -1,10 +1,6 @@
 package product;
 
 import auction.Auction;
-import client.Client;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Product {
     private int id; // number that identifies the product
@@ -13,15 +9,15 @@ public abstract class Product {
     private double minimumPrice; // the minimum price
     private int year;
     private Auction auction;
-//    private List<Client> clientsCompeting = new ArrayList<>();
-//    private List<Double> maxSumPerClient = new ArrayList<>();
 
-    public Product(int id, String name, double minimumPrice, int year) {
+    protected Product(int id, String name, double minimumPrice, int year) {
         this.id = id;
         this.name = name;
         this.minimumPrice = minimumPrice;
         this.year = year;
     }
+
+    protected Product() {}
 
     public int getId() {
         return id;

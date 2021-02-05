@@ -4,8 +4,12 @@ public class Painting extends Product{
     private String painterName;
     private ColorType colors;
 
-    public Painting(int id, String name, double minimumPrice, int year) {
+    protected Painting(int id, String name, double minimumPrice, int year) {
         super(id, name, minimumPrice, year);
+    }
+
+    protected Painting() {
+
     }
 
     public String getPainterName() {
