@@ -3,7 +3,7 @@ package employee;
 public abstract class Employee {
     private int employeeId;
 
-    public Employee(int employeeId) {
+    protected Employee(int employeeId) {
         this.employeeId = employeeId;
     }
 

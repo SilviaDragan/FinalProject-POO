@@ -9,6 +9,18 @@ public class LegalPerson extends Client{
     }
 
     @Override
+    public double payCommission(double transaction) {
+        double commission;
+        if(this.getParticipationNo() < 25) {
+            commission = (25 * transaction)/100;
+        }
+        else {
+            commission = (10 * transaction)/100;
+        }
+        return commission;
+    }
+
+    @Override
     public void placeBet(int auctionId, double maxPreviousSum, double maxSumForMe) {
         // client calculates the sum he is willing to bet for the product at every
         // step of the auction, and informs the broker about it.
@@ -25,7 +37,6 @@ public class LegalPerson extends Client{
             // then divide that by 3
             // add it to max bet at previous step
             double nextBet = maxPreviousSum + (maxSumForMe - maxPreviousSum) / 3;
-//            System.out.println(this.getName() + " nextBet:" + nextBet);
             getPersonalBroker().clientPlacedBet(this, auctionId, nextBet);
         }
     }

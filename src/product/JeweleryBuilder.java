@@ -19,6 +19,6 @@ public class JeweleryBuilder extends ProductBuilder<Jewelery, JeweleryBuilder>{
 
     @Override
     protected JeweleryBuilder getSpecificBuilder() {
-        return null;
+        return this;
     }
 }

@@ -3,9 +3,11 @@ package auction;
 import client.Client;
 import employee.Administrator;
 import employee.Broker;
-import employee.Employee;
 import product.Product;
+import product.ProductNotFoundException;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -16,10 +18,19 @@ public class AuctionHouse {
     private static AuctionHouse instance = null;
     private List<Product> productList = new ArrayList<>();
     private List<Client> clientList = new ArrayList<>();
-    private List<Auction> auctionList = new ArrayList<>();
+    private final List<Auction> auctionList = new ArrayList<>();
     private List<Broker> brokers = new ArrayList<>();
     private List<Administrator> administrators = new ArrayList<>();
+    // make a command to set this capacity
     private int capacity; // capacity for product list
+    private Random rand;
+    {
+        try {
+            rand = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
 
     private AuctionHouse() {}
 
@@ -63,8 +74,16 @@ public class AuctionHouse {
             while (productList.isEmpty()) {
                 notVid.await();
             }
-            System.out.println("remove " + soldProduct.getName());
+            System.out.print("Before removing: ");
+            for(Product p : auctionHouseInstance().getProductList()) {
+                System.out.print(p.getName() + " ");
+            }
             productList.remove(soldProduct);
+            System.out.println();
+            System.out.print("After removing: ");
+            for(Product p : auctionHouseInstance().getProductList()) {
+                System.out.print(p.getName() + " ");
+            }
         } catch (InterruptedException e) {
             // Restore interrupted state
             Thread.currentThread().interrupt();
@@ -76,16 +95,7 @@ public class AuctionHouse {
     }
 
     public Broker assignBroker() {
-        Random random = new Random();
-        Broker broker;
-        while(true) {
-            Employee employee = brokers.get(random.nextInt(brokers.size()));
-            if ( employee instanceof Broker) {
-                broker = (Broker) employee;
-                break;
-            }
-        }
-        return broker;
+        return brokers.get(rand.nextInt(brokers.size()));
     }
 
     public void processRequest(Product requestedProduct, Client client, double maxSum) {
@@ -116,27 +126,45 @@ public class AuctionHouse {
     }
 
     private void startAuction(Auction auction, Product product) {
+        for (Broker b : brokers) {
+            b.setCurrentAuction(auction);
+            b.setSoldProduct(product);
+            auction.registerObserver(b);
+        }
         auction.start(product);
     }
 
-
     public double giveMaxBet(Map<Double, Client> betsList) {
         Map.Entry<Double, Client> entry = betsList.entrySet().iterator().next();
-        double maxBet = entry.getKey();
-        return maxBet;
+        return entry.getKey();
     }
 
-    public void winner(Auction auction, Client winner, double sellPrice) {
-        // winner for auction is found
-        auction.setState(1);
+    public void stopAuction(Auction auction, Client winner, double sellPrice) {
+        auction.setWinner(winner);
+        auction.setSellPrice(sellPrice);
+        int productId = auction.getProductId();
+        try {
+            Product p = findProductById(productId);
+            p.setSellPrice(sellPrice);
+        } catch (ProductNotFoundException e) {
+            e.printStackTrace();
+        }
         auction.notifyObservers();
-        winner.wonAuction();
+        System.out.println("winner is:" + winner.getName() + " for price:" + sellPrice);
     }
 
-    public Administrator getAdministrator(int adminId) {
-        for(Employee e : brokers) {
-            if(e.getEmployeeId() == adminId) {
-                return (Administrator) e;
+    public Product findProductById(int productId) throws ProductNotFoundException {
+        for(Product p : productList) {
+            if (p.getId() == productId)
+                return p;
+        }
+        throw new ProductNotFoundException();
+    }
+
+    public Administrator findAdministratorById(int adminId) {
+        for(Administrator a : administrators) {
+            if(a.getEmployeeId() == adminId) {
+                return a;
             }
         }
         return null;
@@ -164,14 +192,6 @@ public class AuctionHouse {
 
     public List<Auction> getAuctionList() {
         return auctionList;
-    }
-
-    public void setAuctionList(List<Auction> auctionList) {
-        this.auctionList = auctionList;
-    }
-
-    public int getCapacity() {
-        return capacity;
     }
 
     public void setCapacity(int capacity) {

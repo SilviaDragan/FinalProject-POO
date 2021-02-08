@@ -2,6 +2,7 @@ package command;
 
 import auction.AuctionHouse;
 import employee.Administrator;
+import employee.Broker;
 import employee.Employee;
 
 import java.io.File;
@@ -16,6 +17,7 @@ public class Main {
     public static void main(String[] args) {
         // create an instance of the House
         AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
+        auctionHouse.setCapacity(20);
         // class reader will help read information about employees, clients and products
         Reader reader = new Reader();
         String employeesFile = "employees.csv";
@@ -27,7 +29,14 @@ public class Main {
         auctionHouse.setClientList(reader.readClientsCSV(clientsFile));
         auctionHouse.setProductList(reader.readProductsCSV(productsFile));
 
+//        for (Product p : auctionHouse.getProductList()) {
+//            System.out.print(p.getName() + " ");
+//        }
+        System.out.println();
         ExecutorService threadPool = Executors.newCachedThreadPool();
+        for(Broker broker : auctionHouse.getBrokers()) {
+            broker.setThreadPool(threadPool);
+        }
 
         // read the commands clients, brokers and administrators write in this file
         try {
@@ -45,7 +54,7 @@ public class Main {
                         commandTaker.takeCommand(productRequest);
                     }
                     if (command[0].equals("addProduct")) {
-                        Administrator administrator = auctionHouse.getAdministrator(Integer.parseInt(command[1]));
+                        Administrator administrator = auctionHouse.findAdministratorById(Integer.parseInt(command[1]));
                         AddProduct addProduct = new AddProduct(administrator, command, threadPool);
                         commandTaker.takeCommand(addProduct);
                     }
@@ -63,7 +72,6 @@ public class Main {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
 
     }
 }

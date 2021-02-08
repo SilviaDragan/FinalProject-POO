@@ -1,36 +1,22 @@
 package command;
 
-import auction.Auction;
-import auction.AuctionHouse;
 import employee.Administrator;
-import employee.Employee;
 import product.*;
-
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class AddProduct implements Command{
-    private Administrator administrator;
-    private String[] command;
-    private Executor threadPool;
+    private final Administrator administrator;
+    private final String[] command;
+    private final Executor threadPool;
+
     public AddProduct(Administrator administrator, String[] command, Executor executor) {
         this.administrator = administrator;
         this.command = command;
         this.threadPool = executor;
     }
 
-    public Administrator getAdministrator() {
-        return administrator;
-    }
-
-    public void setAdministrator(Administrator administrator) {
-        this.administrator = administrator;
-    }
-
     @Override
     public void execute() {
-        AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
-        Administrator administrator = auctionHouse.getAdministrator(Integer.parseInt(command[1]));
         Product product;
         if ( command[2].equals("Jewelery")) {
             JeweleryBuilder builder = new JeweleryBuilder()

@@ -21,7 +21,7 @@ import product.*;
 
 public class Reader {
 
-    public List<Employee> readEmployeesCSV(String filename) {
+    protected List<Employee> readEmployeesCSV(String filename) {
         List<Employee> employees = new ArrayList<>();
         try (
                 BufferedReader reader = Files.newBufferedReader(Paths.get(filename));
@@ -46,7 +46,7 @@ public class Reader {
         return employees;
     }
 
-    public List<Broker> giveBrokerList(List<Employee> employees) {
+    protected List<Broker> giveBrokerList(List<Employee> employees) {
         List<Broker> brokers = new ArrayList<>();
         for (Employee e : employees) {
             if (e instanceof Broker) {
@@ -56,7 +56,7 @@ public class Reader {
         return brokers;
     }
 
-    public List<Administrator> giveAdminsList(List<Employee> employees) {
+    protected List<Administrator> giveAdminsList(List<Employee> employees) {
         List<Administrator> administrators = new ArrayList<>();
         for (Employee e : employees) {
             if (e instanceof Administrator) {
@@ -66,7 +66,7 @@ public class Reader {
         return administrators;
     }
 
-    List<Client> readClientsCSV(String filename) {
+    protected List<Client> readClientsCSV(String filename) { 
         List<Client> clients = new ArrayList<>();
         try (
                 BufferedReader reader = Files.newBufferedReader(Paths.get(filename));
@@ -96,7 +96,7 @@ public class Reader {
         return clients;
     }
 
-    List<Product> readProductsCSV(String filename) {
+    protected List<Product> readProductsCSV(String filename) {
         List<Product> products = new ArrayList<>();
         try (
                 BufferedReader reader = Files.newBufferedReader(Paths.get(filename));
@@ -106,34 +106,13 @@ public class Reader {
                 Product product;
                 String productType = csvRecord.get(0);
                 if(productType.equals("Painting")) {
-                    PaintingBuilder builder = new PaintingBuilder()
-                            .withId(Integer.parseInt(csvRecord.get(1)))
-                            .withName(csvRecord.get(2))
-                            .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
-                            .withYear(Integer.parseInt(csvRecord.get(4)))
-                            .withPainter(csvRecord.get(5))
-                            .withColor(csvRecord.get(6));
-                    product = builder.build();
+                    product = buildPainting(csvRecord);
                 }
                 else if(productType.equals("Jewelery")){
-                    JeweleryBuilder builder = new JeweleryBuilder()
-                            .withId(Integer.parseInt(csvRecord.get(1)))
-                            .withName(csvRecord.get(2))
-                            .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
-                            .withYear(Integer.parseInt(csvRecord.get(4)))
-                            .withMetal(csvRecord.get(5))
-                            .withPrecious(csvRecord.get(6));
-                    product = builder.build();
+                    product = buildJewelery(csvRecord);
                 }
                 else {
-                    FurnitureBuilder builder = new FurnitureBuilder()
-                            .withId(Integer.parseInt(csvRecord.get(1)))
-                            .withName(csvRecord.get(2))
-                            .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
-                            .withYear(Integer.parseInt(csvRecord.get(4)))
-                            .withType(csvRecord.get(5))
-                            .withMaterial(csvRecord.get(6));
-                    product = builder.build();
+                    product = buildFurniture(csvRecord);
                 }
                 AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
                 int auctionID;
@@ -141,7 +120,7 @@ public class Reader {
                     auctionID = 5000;
                 }
                 else {
-                    auctionID = auctionHouse.getAuctionList().get(auctionHouse.getAuctionList().size() - 1).getId();
+                    auctionID = auctionHouse.getAuctionList().get(auctionHouse.getAuctionList().size() - 1).getId() + 1;
                 }
                 Auction auction = new Auction(auctionID, product.getId());
                 auctionHouse.getAuctionList().add(auction);
@@ -153,6 +132,45 @@ public class Reader {
             e.printStackTrace();
         }
         return products;
+    }
+
+    private Product buildFurniture(CSVRecord csvRecord) {
+        Product product;
+        FurnitureBuilder builder = new FurnitureBuilder()
+                .withId(Integer.parseInt(csvRecord.get(1)))
+                .withName(csvRecord.get(2))
+                .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
+                .withYear(Integer.parseInt(csvRecord.get(4)))
+                .withType(csvRecord.get(5))
+                .withMaterial(csvRecord.get(6));
+        product = builder.build();
+        return product;
+    }
+
+    private Product buildJewelery(CSVRecord csvRecord) {
+        Product product;
+        JeweleryBuilder builder = new JeweleryBuilder()
+                .withId(Integer.parseInt(csvRecord.get(1)))
+                .withName(csvRecord.get(2))
+                .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
+                .withYear(Integer.parseInt(csvRecord.get(4)))
+                .withMetal(csvRecord.get(5))
+                .withPrecious(csvRecord.get(6));
+        product = builder.build();
+        return product;
+    }
+
+    private Product buildPainting(CSVRecord csvRecord) {
+        Product product;
+        PaintingBuilder builder = new PaintingBuilder()
+                .withId(Integer.parseInt(csvRecord.get(1)))
+                .withName(csvRecord.get(2))
+                .withMinimumPrice(Double.parseDouble(csvRecord.get(3)))
+                .withYear(Integer.parseInt(csvRecord.get(4)))
+                .withPainter(csvRecord.get(5))
+                .withColor(csvRecord.get(6));
+        product = builder.build();
+        return product;
     }
 
 }

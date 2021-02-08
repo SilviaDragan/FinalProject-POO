@@ -1,6 +1,5 @@
 package client;
 
-import auction.Observer;
 import employee.Broker;
 
 public abstract class Client{
@@ -19,6 +18,8 @@ public abstract class Client{
         this.wonAuctionsNo = wonAuctionsNo;
     }
 
+    public abstract double payCommission(double transaction);
+
     public abstract void placeBet(int auctionId, double maxPreviousSum, double maxSumForMe);
 
     public Broker getPersonalBroker() {
@@ -28,6 +29,7 @@ public abstract class Client{
     public void setPersonalBroker(Broker personalBroker) {
         this.personalBroker = personalBroker;
     }
+
     public void wonAuction() {
         this.wonAuctionsNo ++;
     }
@@ -75,6 +77,5 @@ public abstract class Client{
     public void setWonAuctionsNo(int wonAuctionsNo) {
         this.wonAuctionsNo = wonAuctionsNo;
     }
-
 
 }

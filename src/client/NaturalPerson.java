@@ -8,6 +8,18 @@ public class NaturalPerson extends Client{
     }
 
     @Override
+    public double payCommission(double transaction) {
+        double commission;
+        if(this.getParticipationNo() < 5) {
+            commission = (20 * transaction)/100;
+        }
+        else {
+            commission = (15 * transaction)/100;
+        }
+        return commission;
+    }
+
+    @Override
     public void placeBet(int auctionId, double maxPreviousSum, double maxSumForMe) {
         // client calculates the sum he is willing to bet for the product at every
         // step of the auction, and informs the broker about it.
