@@ -13,7 +13,11 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-//singleton
+
+/**
+ * This class is implemented as a singleton
+ * It starts and end the auctions
+ */
 public class AuctionHouse {
     private static AuctionHouse instance = null;
     private List<Product> productList = new ArrayList<>();
@@ -21,8 +25,10 @@ public class AuctionHouse {
     private final List<Auction> auctionList = new ArrayList<>();
     private List<Broker> brokers = new ArrayList<>();
     private List<Administrator> administrators = new ArrayList<>();
-    // make a command to set this capacity
     private int capacity; // capacity for product list
+    Lock lock = new ReentrantLock();
+    Condition notVid = lock.newCondition();
+    Condition notFull = lock.newCondition();
     private Random rand;
     {
         try {
@@ -34,6 +40,9 @@ public class AuctionHouse {
 
     private AuctionHouse() {}
 
+    /**
+     * @return the unique instance of the auction house
+     */
     public static AuctionHouse auctionHouseInstance() {
         // if a class instance exists, it is returned
         // only create a new instance if it does not exist already
@@ -42,10 +51,10 @@ public class AuctionHouse {
         return instance;
     }
 
-    Lock lock = new ReentrantLock();
-    Condition notVid = lock.newCondition();
-    Condition notFull = lock.newCondition();
 
+    /**
+     * @param productNew the product to be added
+     */
     // only administrators can do this
     public void addProduct(Product productNew) {
         lock.lock();
@@ -53,10 +62,12 @@ public class AuctionHouse {
             while(productList.size() == capacity) {
                 notFull.await();
             }
-//            System.out.println(productList);
-            System.out.println("add " + productNew.getName());
+            System.out.println("Admin added product: " + productNew);
+            int auctionID = productNew.getId() + 1000;
+            Auction auction = new Auction(auctionID, productNew.getId());
+            productNew.setAuction(auction);
             productList.add(productNew);
-//            System.out.println(productList);
+            auctionList.add(auction);
             notVid.signal();
         } catch (InterruptedException e) {
             // Restore interrupted state
@@ -67,6 +78,9 @@ public class AuctionHouse {
         }
     }
 
+    /**
+     * @param soldProduct the product to be removed
+     */
     // only brokers can do this
     public void removeProduct(Product soldProduct) {
         lock.lock();
@@ -74,16 +88,9 @@ public class AuctionHouse {
             while (productList.isEmpty()) {
                 notVid.await();
             }
-            System.out.print("Before removing: ");
-            for(Product p : auctionHouseInstance().getProductList()) {
-                System.out.print(p.getName() + " ");
-            }
+            System.out.println("Broker removed product: " + soldProduct);
             productList.remove(soldProduct);
-            System.out.println();
-            System.out.print("After removing: ");
-            for(Product p : auctionHouseInstance().getProductList()) {
-                System.out.print(p.getName() + " ");
-            }
+            notFull.signal();
         } catch (InterruptedException e) {
             // Restore interrupted state
             Thread.currentThread().interrupt();
@@ -94,10 +101,18 @@ public class AuctionHouse {
         }
     }
 
+    /**
+     * @return a random broker
+     */
     public Broker assignBroker() {
         return brokers.get(rand.nextInt(brokers.size()));
     }
 
+    /**
+     * @param requestedProduct the product that the client wants
+     * @param client the client that made the request
+     * @param maxSum the maximum price the client is willing to pay for the product
+     */
     public void processRequest(Product requestedProduct, Client client, double maxSum) {
         // house gives client a broker
         Broker broker = assignBroker();
@@ -125,32 +140,77 @@ public class AuctionHouse {
 
     }
 
+    /**
+     * @param auction the auction to be started
+     * @param product the product of the auction
+     */
     private void startAuction(Auction auction, Product product) {
+        // register all brokers as observers for this auction
         for (Broker b : brokers) {
             b.setCurrentAuction(auction);
             b.setSoldProduct(product);
             auction.registerObserver(b);
         }
-        auction.start(product);
+        try {
+            auction.start(product);
+        } catch (InterruptedException e) {
+            // Restore interrupted state
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * @param betsList the map of bets and clients
+     * @return the maximum bet
+     */
     public double giveMaxBet(Map<Double, Client> betsList) {
         Map.Entry<Double, Client> entry = betsList.entrySet().iterator().next();
         return entry.getKey();
     }
 
+    /**
+     * @param auction the auction to be stopped
+     * @param winner the winner of the auction
+     * @param sellPrice the price the product sold for
+     */
     public void stopAuction(Auction auction, Client winner, double sellPrice) {
-        auction.setWinner(winner);
-        auction.setSellPrice(sellPrice);
-        int productId = auction.getProductId();
-        try {
-            Product p = findProductById(productId);
-            p.setSellPrice(sellPrice);
-        } catch (ProductNotFoundException e) {
-            e.printStackTrace();
+        // set the winner and price in auction
+        if(winner != null) {
+            auction.setWinner(winner);
+            auction.setSellPrice(sellPrice);
+            int productId = auction.getProductId();
+            Product p = null;
+            try {
+                p = findProductById(productId);
+                p.setSellPrice(sellPrice);
+            } catch (ProductNotFoundException e) {
+                e.printStackTrace();
+            }
+            displayWinner(winner, sellPrice, p);
+            //notify all observers of the change of state of the auction
+            try {
+                auction.notifyObservers();
+            } catch (InterruptedException e) {
+                // Restore interrupted state
+                Thread.currentThread().interrupt();
+                e.printStackTrace();
+            }
         }
-        auction.notifyObservers();
-        System.out.println("winner is:" + winner.getName() + " for price:" + sellPrice);
+        else {
+            System.out.println("Product did not sell");
+        }
+
+    }
+
+    private void displayWinner(Client winner, double sellPrice, Product p) {
+        String decorator = "~";
+        String space = " ";
+        System.out.println(decorator.repeat(35) + "winner" + decorator.repeat(35));
+        System.out.println(space.repeat(30) +"for product "+ p.getName()+ space.repeat(30));
+        System.out.println(space.repeat(35) + winner.getName() + space.repeat(35));
+        System.out.println(space.repeat(25) + "for price:" + sellPrice + space.repeat(25));
+        System.out.println(decorator.repeat(80));
     }
 
     public Product findProductById(int productId) throws ProductNotFoundException {

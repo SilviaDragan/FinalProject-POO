@@ -1,6 +1,11 @@
-package product;
+package product.jewelery;
 
-public class JeweleryBuilder extends ProductBuilder<Jewelery, JeweleryBuilder>{
+import product.ProductBuilder;
+
+/**
+ * This class builds a product that also has properties of a painting
+ */
+public class JeweleryBuilder extends ProductBuilder<Jewelery, JeweleryBuilder> {
 
     public JeweleryBuilder withMetal(String metal) {
         specificProduct.setMetal(metal);

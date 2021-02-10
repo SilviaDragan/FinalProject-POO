@@ -5,6 +5,9 @@ import employee.Broker;
 import product.Product;
 import java.util.*;
 
+/**
+ * The Auction class is a Subject observed by brokers
+ */
 public class Auction implements Subject{
     private final AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
     private int id;
@@ -17,27 +20,41 @@ public class Auction implements Subject{
     private Client winner;
     private double sellPrice;
 
+    /**
+     * @param id auction's id
+     * @param productId product's id
+     */
     public Auction(int id, int productId) {
         this.id = id;
         this.productId = productId;
     }
 
+    /**
+     * @param o the observer
+     */
     @Override
     public void registerObserver(Observer o) {
         observers.add(o);
     }
 
+    /**
+     * @param o the observer
+     */
     @Override
     public void removeObserver(Observer o) { }
 
     @Override
-    public void notifyObservers() {
+    public void notifyObservers() throws InterruptedException {
         for (Observer observer : observers) {
             observer.update(winner, sellPrice);
         }
     }
 
-    public void start(Product product) {
+    /**
+     * @param product auction for this product
+     * @throws InterruptedException if a thread is interrupted
+     */
+    public void start(Product product) throws InterruptedException {
         for (int step = 0; step < maxStepsNo; step++) {
             // clients choose the sum they desire to bet at each step and communicate this sum to their assigned broker
             for (Broker broker : auctionHouse.getBrokers()) {
@@ -47,8 +64,6 @@ public class Auction implements Subject{
             }
             // after clients place their bets, the house will calculate the max bet
             this.maxBetPerStep = auctionHouse.giveMaxBet(betsMap);
-//            System.out.println("step:" +step + " max bet:" + maxBetPerStep);
-
             // clear the bets list at every step, unless it is the last round
             if(step != this.maxStepsNo - 1) this.betsMap.clear();
         }
@@ -57,19 +72,30 @@ public class Auction implements Subject{
             // product does not sell in this case
             this.winner = null;
             this.sellPrice = 0;
+            auctionHouse.stopAuction(this, this.winner, this.sellPrice);
             notifyObservers();
         }
-        // get winner, notify all clients through brokers
-        auctionHouse.stopAuction(this, getWinner(this.maxBetPerStep, (TreeMap<Double, Client>) this.betsMap),
-                this.maxBetPerStep);
+        else {
+            // get winner, notify all clients through brokers
+            auctionHouse.stopAuction(this, getWinner(this.maxBetPerStep, (TreeMap<Double, Client>) this.betsMap),
+                    this.maxBetPerStep);
+        }
 
     }
 
+    /**
+     * @param winnerBet the bet that the winning client gave
+     * @param betsList a map of clients and their bets
+     * @return the client that won
+     */
     private Client getWinner(double winnerBet, TreeMap<Double, Client> betsList) {
         Client finalWinner = null;
+        // get the clients that gave the same maximum bet
         NavigableMap<Double, Client> winnersMap= betsList.headMap(winnerBet, true);
+        // a list of potential winners
         List<Client> winners = new ArrayList<>(winnersMap.values());
         if(winners.size() == 1) finalWinner =  winners.get(0);
+        // determine the winner by the max number of participation
         else {
             int maxWins = 0;
             for (Client c : winners) {

@@ -1,6 +1,11 @@
-package product;
+package product.painting;
 
-public class PaintingBuilder extends ProductBuilder<Painting, PaintingBuilder>{
+import product.ProductBuilder;
+
+/**
+ * This class builds a product that also has properties of a painting
+ */
+public class PaintingBuilder extends ProductBuilder<Painting, PaintingBuilder> {
 
    public PaintingBuilder withPainter(String painterName) {
        specificProduct.setPainterName(painterName);

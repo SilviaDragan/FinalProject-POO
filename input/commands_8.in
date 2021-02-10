@@ -1,0 +1,60 @@
+listProducts
+addProduct 100 Painting 4020 Landscape 480.00 2020 BobRoss Acrylic
+setAuctionData 100 5006 5 15
+listProducts
+setAuctionData 100 5012 6 18
+setAuctionData 100 5016 6 12
+requestProduct 3002 4016 120.00
+requestProduct 3000 4016 150.00
+listProducts
+requestProduct 3004 4016 165.00
+requestProduct 3001 4016 115.00
+requestProduct 3005 4016 145.00
+requestProduct 3003 4016 148.00
+listProducts
+addProduct 100 Jewelery 4021 Ring 380.00 2020 Gold Precious
+listProducts
+requestProduct 3003 4006 350.00
+requestProduct 3002 4006 320.00
+requestProduct 3000 4006 320.00
+requestProduct 3001 4006 285.00
+requestProduct 3006 4006 290.00
+listProducts
+addProduct 100 Painting 4023 Cows 370.00 2020 LocalArtist Oil
+listProducts
+requestProduct 3001 4012 235.00
+requestProduct 3004 4012 239.90
+requestProduct 3002 4012 225.00
+requestProduct 3003 4012 247.50
+requestProduct 3005 4012 285.00
+requestProduct 3006 4012 240.00
+listProducts
+setAuctionData 100 5010 4 28
+addProduct 100 Furniture 4024 Desk 580.00 2020 DeskBig Wook
+setAuctionData 100 5003 5 12
+requestProduct 3003 4003 340.00
+requestProduct 3001 4003 335.00
+requestProduct 3002 4003 305.00
+requestProduct 3000 4003 315.00
+requestProduct 3005 4003 337.50
+requestProduct 3002 4010 200.00
+requestProduct 3001 4010 200.00
+requestProduct 3003 4010 180.00
+requestProduct 3006 4010 175.00
+listProducts
+setAuctionData 100 5006 5 13
+setAuctionData 100 5012 6 20
+listProducts
+listProducts
+setAuctionData 100 5014 5 19
+requestProduct 3005 4014 105.00
+requestProduct 3000 4014 98.00
+requestProduct 3002 4014 120.00
+requestProduct 3001 4014 115.00
+requestProduct 3004 4014 108.70
+listProducts
+addProduct 100 Painting 4020 Landscape 480.00 2020 BobRoss Acrylic
+listProducts
+requestProduct 3001 4012 235.00
+requestProduct 3002 4012 225.00
+listProducts

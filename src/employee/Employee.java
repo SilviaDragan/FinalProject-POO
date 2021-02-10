@@ -1,5 +1,8 @@
 package employee;
 
+/**
+ * Classes Broker and Administrator extend this class
+ */
 public abstract class Employee {
     private int employeeId;
 

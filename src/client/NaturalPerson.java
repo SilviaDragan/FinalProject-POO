@@ -1,12 +1,26 @@
 package client;
 
+/**
+ *  * Implements the methods in Client
+ */
 public class NaturalPerson extends Client{
     private String birthDate;
 
+    /**
+     * @param id client's id
+     * @param name client's name
+     * @param address client's address
+     * @param participationNo client's no of times he took part in an auction
+     * @param wonAuctions client's no of times won an auction
+     */
     public NaturalPerson(int id, String name, String address, int participationNo, int wonAuctions) {
         super(id, name, address, participationNo, wonAuctions);
     }
 
+    /**
+     * @param transaction the sum the clients initially offered for the product
+     * @return the sum that has to be paid to the broker
+     */
     @Override
     public double payCommission(double transaction) {
         double commission;
@@ -19,6 +33,11 @@ public class NaturalPerson extends Client{
         return commission;
     }
 
+    /**
+     * @param auctionId the auction id
+     * @param maxPreviousSum the max bet at the previous step
+     * @param maxSumForMe the max sum the client is willing to pay
+     */
     @Override
     public void placeBet(int auctionId, double maxPreviousSum, double maxSumForMe) {
         // client calculates the sum he is willing to bet for the product at every
@@ -27,7 +46,6 @@ public class NaturalPerson extends Client{
         // the client needs to bet a larger sum than the max sum from the step before
         // but if the sum is bigger than the max sum he is willing to bet...
         if(maxPreviousSum > maxSumForMe) {
-//            System.out.println(this.getName() + " nextBet:" + maxSumForMe);
             getPersonalBroker().clientPlacedBet(this, auctionId, maxSumForMe);
         }
         else {
@@ -36,7 +54,6 @@ public class NaturalPerson extends Client{
             // then divide that by 4
             // add it to max bet at previous step
             double nextBet = maxPreviousSum + (maxSumForMe - maxPreviousSum) / 4;
-//            System.out.println(this.getName() + " nextBet:" + nextBet);
             getPersonalBroker().clientPlacedBet(this, auctionId, nextBet);
         }
     }

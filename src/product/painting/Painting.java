@@ -1,6 +1,13 @@
-package product;
+package product.painting;
 
-public class Painting extends Product{
+import product.ColorType;
+import product.Product;
+
+/**
+ * Implements the method in parent class
+ * Can only be instanced using Painting Builder
+ */
+public class Painting extends Product {
     private String painterName;
     private ColorType colors;
 
@@ -9,7 +16,6 @@ public class Painting extends Product{
     }
 
     protected Painting() {
-
     }
 
     public String getPainterName() {
@@ -18,6 +24,10 @@ public class Painting extends Product{
 
     public void setPainterName(String painterName) {
         this.painterName = painterName;
+    }
+
+    public ColorType getColors() {
+        return colors;
     }
 
     public void setColorType(String colorType) {
@@ -30,6 +40,10 @@ public class Painting extends Product{
         else {
             this.colors = ColorType.ACRYLIC;
         }
+    }
+
+    public String toString(){
+        return "Painting Id:" + this.getId() + " name:" + this.getName() + " by:" + this.getPainterName();
     }
 
 }

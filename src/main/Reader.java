@@ -1,4 +1,4 @@
-package command;
+package main;
 
 import auction.Auction;
 import auction.AuctionHouse;
@@ -18,9 +18,20 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import product.*;
+import product.furniture.FurnitureBuilder;
+import product.jewelery.JeweleryBuilder;
+import product.painting.PaintingBuilder;
 
+/**
+ * This class is a helper class that reads all the input information regarding clients, employees and products
+ * from csv files.
+ */
 public class Reader {
 
+    /**
+     * @param filename reads information from this file
+     * @return a list of employees
+     */
     protected List<Employee> readEmployeesCSV(String filename) {
         List<Employee> employees = new ArrayList<>();
         try (
@@ -46,6 +57,10 @@ public class Reader {
         return employees;
     }
 
+    /**
+     * @param employees a list of employees
+     * @return a list of brokers
+     */
     protected List<Broker> giveBrokerList(List<Employee> employees) {
         List<Broker> brokers = new ArrayList<>();
         for (Employee e : employees) {
@@ -56,6 +71,10 @@ public class Reader {
         return brokers;
     }
 
+    /**
+     * @param employees a list of employees
+     * @return a list of administrators
+     */
     protected List<Administrator> giveAdminsList(List<Employee> employees) {
         List<Administrator> administrators = new ArrayList<>();
         for (Employee e : employees) {
@@ -66,7 +85,11 @@ public class Reader {
         return administrators;
     }
 
-    protected List<Client> readClientsCSV(String filename) { 
+    /**
+     * @param filename reads information from this file
+     * @return a list of clients
+     */
+    protected List<Client> readClientsCSV(String filename) {
         List<Client> clients = new ArrayList<>();
         try (
                 BufferedReader reader = Files.newBufferedReader(Paths.get(filename));
@@ -96,6 +119,10 @@ public class Reader {
         return clients;
     }
 
+    /**
+     * @param filename reads information from this file
+     * @return a list of Products
+     */
     protected List<Product> readProductsCSV(String filename) {
         List<Product> products = new ArrayList<>();
         try (
@@ -116,6 +143,7 @@ public class Reader {
                 }
                 AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
                 int auctionID;
+                // set up an auction for each product
                 if(auctionHouse.getAuctionList().isEmpty()) {
                     auctionID = 5000;
                 }
@@ -134,6 +162,10 @@ public class Reader {
         return products;
     }
 
+    /**
+     * @param csvRecord a line in the csv file
+     * @return a product
+     */
     private Product buildFurniture(CSVRecord csvRecord) {
         Product product;
         FurnitureBuilder builder = new FurnitureBuilder()
@@ -147,6 +179,10 @@ public class Reader {
         return product;
     }
 
+    /**
+     * @param csvRecord a line in the csv file
+     * @return a product
+     */
     private Product buildJewelery(CSVRecord csvRecord) {
         Product product;
         JeweleryBuilder builder = new JeweleryBuilder()
@@ -160,6 +196,10 @@ public class Reader {
         return product;
     }
 
+    /**
+     * @param csvRecord a line in the csv file
+     * @return a product
+     */
     private Product buildPainting(CSVRecord csvRecord) {
         Product product;
         PaintingBuilder builder = new PaintingBuilder()

@@ -1,4 +1,4 @@
-package command;
+package main.command;
 
 import auction.AuctionHouse;
 import client.Client;
@@ -6,7 +6,7 @@ import client.ClientNotFoundException;
 import product.Product;
 import product.ProductNotFoundException;
 
-public class ProductRequest implements Command{
+public class ProductRequest implements Command {
     private final int clientId;
     private final int productId;
     private final double maxSum;

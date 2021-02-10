@@ -1,6 +1,12 @@
-package product;
+package product.jewelery;
 
-public class Jewelery extends Product{
+import product.Product;
+
+/**
+ * Implements the method in parent class
+ * Can only be instanced using Painting Builder
+ */
+public class Jewelery extends Product {
     private String metal;
     private boolean preciousStone;
 
@@ -23,11 +29,11 @@ public class Jewelery extends Product{
     }
 
     public void setIfPrecious(String decision) {
-        if(decision.equals("Precious")){
-            this.preciousStone = true;
-        }
-        else {
-            this.preciousStone = false;
-        }
+        this.preciousStone = decision.equals("Precious");
+    }
+
+    public String toString(){
+        return "Jewelery Id:" + this.getId() + " Name:" + this.getName() + " made of:" + this.getMetal()
+                + " precious:" + this.isPreciousStone();
     }
 }

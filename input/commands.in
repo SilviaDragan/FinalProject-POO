@@ -1,0 +1,29 @@
+setAuctionData 100 5000 3 5
+setAuctionData 100 5001 5 12
+setAuctionData 100 5002 4 7
+setAuctionData 100 5003 7 10
+listProducts
+requestProduct 3002 4000 200.00
+requestProduct 3001 4000 180.00
+requestProduct 3006 4000 175.00
+listProducts
+requestProduct 3000 4002 48.00
+requestProduct 3001 4002 45.50
+requestProduct 3006 4002 49.00
+requestProduct 3004 4002 50.00
+addProduct 100 Jewelery 4020 Ring 380.00 2020 Gold Precious
+listProducts
+addProduct 100 Painting 4021 Landscape 480.00 2020 BobRoss Acrylic
+requestProduct 3000 4001 150.00
+requestProduct 3001 4001 170.00
+requestProduct 3002 4001 160.00
+requestProduct 3003 4001 175.00
+requestProduct 3004 4001 165.00
+requestProduct 3000 4003 370.00
+requestProduct 3001 4003 400.00
+requestProduct 3002 4003 380.00
+requestProduct 3003 4003 390.00
+requestProduct 3004 4003 405.00
+requestProduct 3005 4003 395.00
+requestProduct 3006 4003 375.00
+listProducts

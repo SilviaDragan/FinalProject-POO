@@ -2,6 +2,10 @@ package product;
 
 import auction.Auction;
 
+/**
+ * Classes Jewelery, Furniture and Painting implement the abstract methods of this class
+ * In order to instance a new product, a builder class will help
+ */
 public abstract class Product {
     private int id; // number that identifies the product
     private String name; // the name of the product
@@ -10,6 +14,12 @@ public abstract class Product {
     private int year;
     private Auction auction;
 
+    /**
+     * @param id the id of the product
+     * @param name the name of the product
+     * @param minimumPrice the minimum price the product can sell for
+     * @param year the year of the product
+     */
     protected Product(int id, String name, double minimumPrice, int year) {
         this.id = id;
         this.name = name;

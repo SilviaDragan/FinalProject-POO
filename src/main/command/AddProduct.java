@@ -1,10 +1,14 @@
-package command;
+package main.command;
 
 import employee.Administrator;
 import product.*;
+import product.furniture.FurnitureBuilder;
+import product.jewelery.JeweleryBuilder;
+import product.painting.PaintingBuilder;
+
 import java.util.concurrent.Executor;
 
-public class AddProduct implements Command{
+public class AddProduct implements Command {
     private final Administrator administrator;
     private final String[] command;
     private final Executor threadPool;
@@ -16,7 +20,7 @@ public class AddProduct implements Command{
     }
 
     @Override
-    public void execute() {
+    public void execute() throws InterruptedException {
         Product product;
         if ( command[2].equals("Jewelery")) {
             JeweleryBuilder builder = new JeweleryBuilder()
@@ -50,6 +54,7 @@ public class AddProduct implements Command{
         }
         administrator.setCurrentProduct(product);
         threadPool.execute(administrator);
+        Thread.sleep(1000);
 
     }
 

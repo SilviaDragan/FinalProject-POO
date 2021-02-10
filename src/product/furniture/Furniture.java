@@ -1,6 +1,12 @@
-package product;
+package product.furniture;
 
-public class Furniture extends Product{
+import product.Product;
+
+/**
+ * Implements the method in parent class
+ * Can only be instanced using Painting Builder
+ */
+public class Furniture extends Product {
     private String type;
     private String material;
 
@@ -26,5 +32,9 @@ public class Furniture extends Product{
 
     public void setMaterial(String material) {
         this.material = material;
+    }
+
+    public String toString(){
+        return "Furniture Id:" + this.getId() + " name:" + this.getName();
     }
 }

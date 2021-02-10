@@ -1,9 +1,9 @@
-package command;
+package main.command;
 
 import auction.Auction;
 import auction.AuctionHouse;
 
-public class SetAuctionData implements Command{
+public class SetAuctionData implements Command {
     private final int auctionId;
     private final int participants;
     private final int maxSteps;
@@ -16,17 +16,21 @@ public class SetAuctionData implements Command{
     @Override
     public void execute() {
         AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
-        Auction auction = findAuction(auctionHouse, auctionId);
-        auction.setParticipantsNo(participants);
-        auction.setMaxStepsNo(maxSteps);
+        try {
+            Auction auction = findAuction(auctionHouse, auctionId);
+            auction.setParticipantsNo(participants);
+            auction.setMaxStepsNo(maxSteps);
+        } catch (AuctionNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
-    private Auction findAuction(AuctionHouse auctionHouse, int auctionId) {
+    private Auction findAuction(AuctionHouse auctionHouse, int auctionId) throws AuctionNotFoundException {
         for (Auction a : auctionHouse.getAuctionList()) {
             if(a.getId() == auctionId) {
                 return a;
             }
         }
-        return null;
+        throw new AuctionNotFoundException();
     }
 }

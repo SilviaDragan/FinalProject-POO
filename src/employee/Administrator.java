@@ -3,6 +3,9 @@ package employee;
 import auction.AuctionHouse;
 import product.Product;
 
+/**
+ * Administrators add products to the list of products in the auction house
+ */
 public class Administrator extends Employee implements Runnable{
     private final AuctionHouse auctionHouse = AuctionHouse.auctionHouseInstance();
     private Product currentProduct;
@@ -11,9 +14,6 @@ public class Administrator extends Employee implements Runnable{
         super(employeeId);
     }
 
-    //    public Administrator(Product product) {
-//        this.currentProduct = product;
-//    }
     @Override
     public void run() {
         auctionHouse.addProduct(currentProduct);

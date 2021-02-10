@@ -1,4 +1,6 @@
-package command;
+package main.command;
+
+import main.command.Command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ public class CommandTaker {
     /**
      * Executed all commands in list
      */
-    public void doCommands(){
+    public void doCommands() throws InterruptedException {
         for(Command command : commandList) {
             command.execute();
         }

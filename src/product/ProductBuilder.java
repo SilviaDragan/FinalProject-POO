@@ -10,6 +10,9 @@ public abstract class ProductBuilder<T extends Product, B extends ProductBuilder
     protected abstract T getSpecificProduct();
     protected abstract B getSpecificBuilder();
 
+    /**
+     * class constructor
+     */
     protected ProductBuilder () {
         specificProduct = getSpecificProduct();
         specificBuilder = getSpecificBuilder();
