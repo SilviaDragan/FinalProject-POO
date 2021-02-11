@@ -40,7 +40,7 @@ public class Main {
         }
         // read the commands clients, brokers and administrators write in this file
         try {
-            File inputFile = new File("input/commands_8.in");
+            File inputFile = new File("input/commands.in");
             CommandTaker commandTaker;
             try (Scanner scanner = new Scanner(inputFile)) {
                 commandTaker = new CommandTaker();

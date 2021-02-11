@@ -1,0 +1,55 @@
+Dragan Silvia 321CB
+
+Main(app package):
+    The information about the auction house(employees, clients and initial products) is read from csv files.
+    The class reader is a helper class that implements methods which transform information from the csv files into
+lists of products, brokers, administrators and products. Employees and Clients can write their commands to the house
+in the "command_x.in" files. Clients can request a certain product, and this is the only time they can
+communicate directly with the house, and administrators can add products and set details about specific
+auctions.
+    Here, I implemented the command pattern to encapsulate the way the commands are processed. An instance of
+the class CommandTaker registers each command by adding it to a list, then the list of commands will be executed
+in order. For each command there is a class that implements the method execute.
+
+    The commands are:
+- addProduct adminID ProductType ProductId name price year productDetails
+exp: addProduct 100 Painting 4021 Landscape 480.00 2020 BobRoss Acrylic
+- listProducts
+- requestProduct clientId productID maxPrice
+exp: requestProduct 3001 4002 45.50
+- setAuctionData adminId auctionID participantsNo maxStepsNo
+exp: setAuctionData 100 5002 4 7
+
+Products:
+    I implemented the Product class as an abstract class extended by Jewelery, Furniture and Painting.
+In order to create a new instance of a product, I created a generic builder for product and three corresponding
+builders that extend the product builder and create a product with selected attributes.
+
+The auction mechanism:
+    The auction house is implemented as Singleton and the observer patterns is implemented
+for each auction. The auction is the subject and the observers are the Brokers.
+When enough clients request a product, the auction house starts the auction. When
+starting the auction, all brokers are called to observe the auction.
+    For an auction, there are n steps made.
+    For each step, the brokers ask their clients
+(if they have clients participating in the auction) for the bet they want to put
+for the next step, informing them about the max bet made at the previous step.
+Each client informs the broker about their bet (Clients (legal/natural) calculate
+their next bet by ) adding to the previous max bet the difference between the max sum
+they initially planned and the previous max bet divided by 3 or 4 depending on the type of
+client they are.
+    The broker takes this bet and puts it in the Map of clients and
+their bets in auction. This map is a tree map sorted in reverse order to get the
+client who placed the biggest bet.
+    At the last step, the auction is stopped. If the last max bet is bigger than the  minimum
+price for the product, a winner is declared and the observers(brokers) are notified
+that the auction is stopped and has a winner.
+    The broker that was in charge of the winning client will notify his client that he is a winner
+and delete the product from the product list. Brokers ask their clients to pay commission for the service
+they provided. Each client pays according to the max sum they wanted to pay for the
+product and if they are a natural or legal person. All brokers end their connection to the clients and are no
+longer observers of ths auction. The auction House displays the winner or if the
+product did not sell.
+
+
+

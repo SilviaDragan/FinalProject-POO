@@ -1,0 +1,4 @@
+addProduct 100 Jewelery 4020 Ring 380.00 2020 Gold Precious
+requestProduct 3002 4000 200.00
+requestProduct 3001 4000 180.00
+requestProduct 3000 4000 175.00

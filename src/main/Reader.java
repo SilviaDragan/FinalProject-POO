@@ -32,7 +32,7 @@ public class Reader {
      * @param filename reads information from this file
      * @return a list of employees
      */
-    protected List<Employee> readEmployeesCSV(String filename) {
+    public List<Employee> readEmployeesCSV(String filename) {
         List<Employee> employees = new ArrayList<>();
         try (
                 BufferedReader reader = Files.newBufferedReader(Paths.get(filename));
@@ -61,7 +61,7 @@ public class Reader {
      * @param employees a list of employees
      * @return a list of brokers
      */
-    protected List<Broker> giveBrokerList(List<Employee> employees) {
+    public List<Broker> giveBrokerList(List<Employee> employees) {
         List<Broker> brokers = new ArrayList<>();
         for (Employee e : employees) {
             if (e instanceof Broker) {
@@ -75,7 +75,7 @@ public class Reader {
      * @param employees a list of employees
      * @return a list of administrators
      */
-    protected List<Administrator> giveAdminsList(List<Employee> employees) {
+    public List<Administrator> giveAdminsList(List<Employee> employees) {
         List<Administrator> administrators = new ArrayList<>();
         for (Employee e : employees) {
             if (e instanceof Administrator) {
@@ -89,7 +89,7 @@ public class Reader {
      * @param filename reads information from this file
      * @return a list of clients
      */
-    protected List<Client> readClientsCSV(String filename) {
+    public List<Client> readClientsCSV(String filename) {
         List<Client> clients = new ArrayList<>();
         try (
                 BufferedReader reader = Files.newBufferedReader(Paths.get(filename));
@@ -123,7 +123,7 @@ public class Reader {
      * @param filename reads information from this file
      * @return a list of Products
      */
-    protected List<Product> readProductsCSV(String filename) {
+    public List<Product> readProductsCSV(String filename) {
         List<Product> products = new ArrayList<>();
         try (
                 BufferedReader reader = Files.newBufferedReader(Paths.get(filename));
